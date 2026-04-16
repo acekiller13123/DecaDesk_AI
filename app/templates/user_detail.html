@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block header_title %}
+    <h1>User Profile</h1>
+{% endblock %}
+
+{% block content %}
+<div class="detail-grid">
+    <section class="card">
+        <h2>{{ user.name }}</h2>
+        <p class="muted">{{ user.email }}</p>
+        <div class="detail-list">
+            <div><strong>Department:</strong> {{ user.department }}</div>
+            <div><strong>Role:</strong> {{ user.role.value }}</div>
+            <div><strong>Status:</strong> {{ user.status.value }}</div>
+            <div><strong>Last login:</strong> {{ user.last_login_at or "Never" }}</div>
+            <div><strong>Temporary password:</strong> {{ user.temporary_password or "Not recently reset" }}</div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Actions</h2>
+        <div class="stack-form">
+            <form method="post" action="/users/{{ user.id }}/reset-password?role={{ current_role.value }}">
+                <button type="submit" {% if current_role.value not in ["IT_SUPPORT", "SUPER_ADMIN"] %}disabled title="Only IT Support and Super Admin can reset passwords"{% endif %}>Reset password</button>
+            </form>
+
+            <form method="post" action="/users/{{ user.id }}/status?role={{ current_role.value }}">
+                <label>Status
+                    <select name="status">
+                        {% for status in ["ACTIVE", "INACTIVE", "DISABLED"] %}
+                            <option value="{{ status }}" {% if user.status.value == status %}selected{% endif %}>{{ status }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <button type="submit" {% if current_role.value not in ["IT_SUPPORT", "SUPER_ADMIN", "HR_ADMIN"] %}disabled{% endif %}>Update status</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+<div class="detail-grid section">
+    <section class="card">
+        <h2>Assigned Licenses</h2>
+        <div class="chip-list">
+            {% for assigned in user_licenses %}
+                <span class="chip">{{ assigned.name }} ({{ assigned.status.value }})</span>
+            {% else %}
+                <p class="muted">No licenses assigned.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Manage Licenses</h2>
+        <form method="post" action="/users/{{ user.id }}/licenses?role={{ current_role.value }}" class="stack-form">
+            <label>License
+                <select name="license_code">
+                    {% for license in licenses %}
+                        <option value="{{ license.code }}">{{ license.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Operation
+                <select name="operation">
+                    <option value="assign">Assign</option>
+                    <option value="revoke">Revoke</option>
+                </select>
+            </label>
+            <button type="submit" {% if current_role.value not in ["IT_SUPPORT", "SUPER_ADMIN"] %}disabled title="Only IT Support and Super Admin can manage licenses"{% endif %}>Apply</button>
+        </form>
+    </section>
+</div>
+{% endblock %}
+

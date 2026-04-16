@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DecaDesk AI Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/base.css') }}">
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo">DecaDesk<span>AI</span></div>
+        <nav>
+            <a class="{% if request.url.path == '/dashboard' %}active{% endif %}" href="/dashboard?role={{ current_role.value }}">Dashboard</a>
+            <a class="{% if request.url.path == '/users' or request.url.path == '/users/new' or request.url.path.startswith('/users/') %}active{% endif %}" href="/users?role={{ current_role.value }}">Users</a>
+            <a class="{% if request.url.path == '/licenses' %}active{% endif %}" href="/licenses?role={{ current_role.value }}">Licenses</a>
+            <a class="{% if request.url.path == '/audit-logs' %}active{% endif %}" href="/audit-logs?role={{ current_role.value }}">Audit Logs</a>
+            <a class="{% if request.url.path == '/chat' %}active{% endif %}" href="/chat?role={{ current_role.value }}">Helpdesk Chat</a>
+        </nav>
+        <div class="role-indicator">
+            Role: <span class="badge">{{ current_role.value if current_role else 'IT_SUPPORT' }}</span>
+        </div>
+    </aside>
+    <main class="content">
+        <header class="topbar">
+            <div class="topbar-title">
+                {% block header_title %}{% endblock %}
+            </div>
+        </header>
+        <section class="page">
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+</div>
+<div id="toast-container"></div>
+<script src="{{ url_for('static', path='js/toast.js') }}"></script>
+<script>
+    const toastMessage = new URLSearchParams(window.location.search).get("toast");
+    if (toastMessage) {
+        showToast(toastMessage);
+    }
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
+

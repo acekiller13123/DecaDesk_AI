@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block header_title %}
+    <h1>IT Helpdesk Chat</h1>
+{% endblock %}
+
+{% block content %}
+<div class="chat-layout">
+    <section class="card">
+        <h2>Trigger autonomous workflows</h2>
+        <p class="muted">Use a natural-language request like a real IT support ticket.</p>
+
+        <div class="quick-prompts">
+            <button class="secondary" type="button" data-prompt="Reset password for john@company.com">Reset John's password</button>
+            <button class="secondary" type="button" data-prompt="Create a new user named Sarah with email sarah@company.com in Engineering and assign Microsoft 365">Create Sarah</button>
+            <button class="secondary" type="button" data-prompt="Check if alex@company.com exists. If not, create the account and assign Slack and Microsoft 365.">Check or create Alex</button>
+            <button class="secondary" type="button" data-prompt="Disable all accounts inactive for 90 days">Disable inactive accounts</button>
+        </div>
+
+        <form id="chat-form" class="stack-form">
+            <textarea id="chat-input" rows="5" placeholder="Reset password for john@company.com"></textarea>
+            <button type="submit" id="chat-submit">Run in browser</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Execution log</h2>
+        <p class="muted">Planner, action, and verification events.</p>
+        <div id="chat-log" class="chat-log"></div>
+    </section>
+
+    <section class="card cua-card">
+        <h2>CUA Trace</h2>
+        <p class="muted">Screenshot-grounded decision suggestions from the agent.</p>
+        <div id="cua-log" class="chat-log cua-log"></div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='js/chat.js') }}"></script>
+{% endblock %}
+

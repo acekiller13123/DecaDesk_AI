@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block header_title %}
+    <h1>Create User</h1>
+{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <form method="post" class="stack-form">
+        <label>Name
+            <input type="text" name="name" required>
+        </label>
+        <label>Email
+            <input type="email" name="email" required>
+        </label>
+        <label>Department
+            <input type="text" name="department" required>
+        </label>
+        <label>Role
+            <select name="role" required>
+                {% for role in roles %}
+                    <option value="{{ role.value }}">{{ role.value }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <fieldset>
+            <legend>Assign licenses</legend>
+            <div class="checkbox-grid">
+                {% for license in licenses %}
+                    <label class="checkbox-row">
+                        <input type="checkbox" name="licenses" value="{{ license.code }}">
+                        <span>{{ license.name }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </fieldset>
+        <button type="submit">Create user</button>
+    </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block header_title %}
+    <h1>Users</h1>
+{% endblock %}
+
+{% block content %}
+<div class="toolbar">
+    <form method="get" class="inline-form">
+        <input type="hidden" name="role" value="{{ current_role.value }}">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search name or email" aria-label="Search name or email">
+        <select name="status">
+            <option value="">All statuses</option>
+            {% for user_status in user_statuses %}
+                <option value="{{ user_status.value }}" {% if status_filter == user_status.value %}selected{% endif %}>{{ user_status.value }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="secondary">Filter</button>
+    </form>
+    <a class="button-link" href="/users/new?role={{ current_role.value }}">+ Create user</a>
+</div>
+
+<div class="table-wrap">
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.name }}</td>
+            <td><code>{{ user.email }}</code></td>
+            <td>{{ user.department }}</td>
+            <td><span class="badge subdued">{{ user.role.value }}</span></td>
+            <td><span class="badge status-{{ user.status.value|lower }}">{{ user.status.value }}</span></td>
+            <td>
+                <div class="actions">
+                    <a class="button-link secondary" href="/users/{{ user.id }}?role={{ current_role.value }}">View</a>
+                    {% if current_role.value in ["IT_SUPPORT", "SUPER_ADMIN"] %}
+                        <form method="post" action="/users/{{ user.id }}/reset-password?role={{ current_role.value }}">
+                            <button type="submit">Reset password</button>
+                        </form>
+                    {% else %}
+                        <span class="muted">No access</span>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="6" class="muted">No users matched your filters.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
+

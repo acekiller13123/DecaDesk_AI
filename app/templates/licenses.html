@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block header_title %}
+    <h1>Licenses</h1>
+{% endblock %}
+
+{% block content %}
+<table class="table">
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Code</th>
+        <th>Description</th>
+        <th>Assigned</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in license_rows %}
+        <tr>
+            <td>{{ row.license.name }}</td>
+            <td>{{ row.license.code }}</td>
+            <td>{{ row.license.description }}</td>
+            <td>{{ row.assigned }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
