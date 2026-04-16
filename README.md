@@ -129,15 +129,6 @@ python -m agent.cli
   - `DECADESK_HEADLESS`
 - Ensure Playwright Chromium runtime is installed in the deployment image
 
-## Loom Video Script (suggested)
-
-1. Quick intro: problem and DecaDesk AI pitch
-2. Show admin dashboard and users page
-3. Run scenario 1 (reset password)
-4. Run scenario 2 (create Sarah)
-5. Run scenario 3 (check-or-create Alex + licenses)
-6. Show audit logs and verification outcomes
-7. Close with architecture and future improvements
 
 ## Future Improvements
 
